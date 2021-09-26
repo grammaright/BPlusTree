@@ -10,6 +10,11 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    if (!strcmp(argv[2], "create")) {
+        bpt::bplus_tree database(argv[1], true);
+        return 0;
+    }
+
     bpt::bplus_tree database(argv[1]);
     if (!strcmp(argv[2], "search")) {
         if (argc < 4) {
@@ -51,6 +56,14 @@ int main(int argc, char *argv[])
         }
 
         if (database.update(argv[3], atoi(argv[4])) != 0)
+            printf("Key %s does not exists.\n", argv[3]);
+    } else if (!strcmp(argv[2], "remove")) {
+        if (argc < 4) {
+            fprintf(stderr, "Format is [remove key]\n");
+            return 1;
+        }
+
+        if (database.remove(argv[3]) != 0)
             printf("Key %s does not exists.\n", argv[3]);
     } else {
         fprintf(stderr, "Invalid command: %s\n", argv[2]);
